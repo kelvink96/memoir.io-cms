@@ -153,6 +153,43 @@ export const getComments = async (slug: string) => {
 	return result.comments;
 }
 
+export const getCategoryPost = async (slug: string) => {
+	const query = gql`
+    query GetCategoryPost($slug: String!) {
+      postsConnection(where: {categories_some: {slug: $slug}}) {
+        edges {
+          cursor
+          node {
+            author {
+              bio
+              name
+              id
+              photo {
+                url
+              }
+            }
+            createdAt
+            slug
+            title
+            excerpt
+            featuredImage {
+              url
+            }
+            categories {
+              name
+              slug
+            }
+          }
+        }
+      }
+    }
+  `;
+
+	const result = await request(graphqlAPI, query, { slug });
+
+	return result.postsConnection.edges;
+};
+
 export const getFeaturedPosts = async () => {
 	const query = gql`
     query GetFeaturedPost() {

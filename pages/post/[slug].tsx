@@ -1,13 +1,20 @@
 import React from 'react';
-import {Author, Categories, Comments, CommentsForm, PostDetail, PostWidget} from "../../components";
+import {Author, Categories, Comments, CommentsForm, Loader, PostDetail, PostWidget} from "../../components";
 import {getPostDetails, getPosts} from "../../services";
 import {IPost} from "../../types";
+import {useRouter} from "next/router";
 
 interface IProps {
 	post: IPost
 }
 
 const PostDetails = ({post}: IProps) => {
+	const router = useRouter();
+
+	if (router.isFallback) {
+		return <Loader/>;
+	}
+
 	return (
 		<div className="container mx-auto px-10 mb-8">
 			<div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
